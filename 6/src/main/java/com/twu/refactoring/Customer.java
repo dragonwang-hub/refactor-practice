@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Customer {
+	private static final int REGULAREACHDAYRENT = 2;
+	private static final int NEW_RELEASEEACHDAYRENT = 3;
+	private static final int CHILDRENSEACHDAYRENT = 3;
+
 
 	private String name;
 	private ArrayList<Rental> rentalList = new ArrayList<Rental>();
@@ -33,16 +37,14 @@ public class Customer {
 			switch (each.getMovie().getPriceCode()) {
 			case Movie.REGULAR:
 				thisAmount += 2;
-				if (each.getDaysRented() > 2)
-					thisAmount += (each.getDaysRented() - 2) * 1.5;
+				thisAmount = getThisAmount(thisAmount, each, REGULAREACHDAYRENT);
 				break;
 			case Movie.NEW_RELEASE:
-				thisAmount += each.getDaysRented() * 3;
+				thisAmount += each.getDaysRented() * NEW_RELEASEEACHDAYRENT;
 				break;
 			case Movie.CHILDRENS:
 				thisAmount += 1.5;
-				if (each.getDaysRented() > 3)
-					thisAmount += (each.getDaysRented() - 3) * 1.5;
+				thisAmount = getThisAmount(thisAmount, each, CHILDRENSEACHDAYRENT);
 				break;
 
 			}
@@ -65,6 +67,12 @@ public class Customer {
 		result += "You earned " + String.valueOf(frequentRenterPoints)
 				+ " frequent renter points";
 		return result;
+	}
+
+	private double getThisAmount(double thisAmount, Rental each, int i) {
+		if (each.getDaysRented() > i)
+			thisAmount += (each.getDaysRented() - i) * 1.5;
+		return thisAmount;
 	}
 
 }
